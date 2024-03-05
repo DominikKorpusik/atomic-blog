@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { PostProvider, usePosts } from "./PostProvider";
+import { memo, useEffect, useState } from "react";
+import { usePosts } from "./PostProvider";
 import { createRandomPost } from "./Faker";
 
 function App() {
@@ -22,12 +22,10 @@ function App() {
         {isFakeDark ? "☀️" : "🌙"}
       </button>
 
-      <PostProvider>
-        <Header />
-        <Main />
-        <Archive />
-        <Footer />
-      </PostProvider>
+      <Header />
+      <Main />
+      <Archive />
+      <Footer />
     </section>
   );
 }
@@ -66,14 +64,14 @@ function Results() {
   return <p>🚀 {posts.length} atomic posts found</p>;
 }
 
-function Main() {
+const Main = memo(function Main() {
   return (
     <main>
       <FormAddPost />
       <Posts />
     </main>
   );
-}
+});
 
 function Posts() {
   return (
@@ -116,14 +114,17 @@ function FormAddPost() {
 function List() {
   const { posts } = usePosts();
   return (
-    <ul>
-      {posts.map((post, i) => (
-        <li key={i}>
-          <h3>{post.title}</h3>
-          <p>{post.body}</p>
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul>
+        {posts.map((post, i) => (
+          <li key={i}>
+            <h3>{post.title}</h3>
+            <p>{post.body}</p>
+          </li>
+        ))}
+      </ul>
+      {/* <Test /> */}
+    </>
   );
 }
 
@@ -139,7 +140,7 @@ function Archive() {
 
   return (
     <aside>
-      <h2>Post archive</h2>
+      <h2>Title</h2>
       <button onClick={() => setShowArchive((s) => !s)}>
         {showArchive ? "Hide archive posts" : "Show archive posts"}
       </button>
